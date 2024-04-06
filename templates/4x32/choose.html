@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+	<div class="column is-4 is-offset-4">
+    <h3 class="title">How far are you willing to go for points</h3>
+    <div class="box">
+    	<div id="app"></div>
+        <form method="POST" action="/4x32/bid">
+            <div class="field">
+                <div class="control">
+                    <!--TODO bid participation mandatory phase 3 for current leaders-->
+                    <label for="bidParticipation">Do you wanna bid ?</label>
+                    <select name="bidParticipation">
+                        <option value="yes"> Yes </option>
+                        <option value="no"> No </option>
+                    </select>
+                	<label for="trump">Choose a Trump Suit:</label>
+                    <select name="trump">
+                    	{% for suit in suits %}
+                    		<option value="{{suit}}">{{suit}}</option>
+                    	{%endfor%}
+                            <option value="">None</option>
+                    </select>
+                </div>
+            </div>
+            <div class="field">
+                <div class="control">
+                    {% if phase == 3 %}
+                	<label for="no_of_hands">Choose No. of Hands:</label>
+                    <select name="no_of_hands">
+                    	{% for i in range(5,9) %}
+                    		<option value="{{i}}">{{i}}</option>
+                    	{%endfor%}
+                    </select>
+                    {% else %}
+                    <label for="bid">Choose the bid:</label>
+                    <select name="bid">
+                    	{% for i in range(5) %}
+                    		<option value="{{i}}">{{i}}</option>
+                    	{%endfor%}
+                    </select>
+                    <select name="ordering">
+                        <option value="-1">Lower Ranked Cards will win hands</option>
+                        <option value="1">Higher Ranked Cards will win hands</option>
+                    </select>
+                    {% endif %}
+                    
+                </div>
+            </div>
+            <button class="button is-block is-info is-fullwidth" id="Select">Make Selection</button>
+        </form>
+    </div>
+    
+    </div>
+    {% include "hand.html"%}
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script type="text/javascript">
+	function check_selection(){
+  $.ajax({
+    url: '/4x32/check_selection',
+    success:  function(data) {
+      console.log(data);
+      if (data == "true")
+        window.location.href = "/4x32/round/1";
+      else if (data != "false")
+        window.location.href = "/4x32/bid"
+        },
+      timeout: 5000 //If timeout is reached run again
+  });
+}
+setInterval(check_selection, 5000);
+</script>
+
+{% endblock %}

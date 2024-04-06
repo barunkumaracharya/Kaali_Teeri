@@ -27,6 +27,16 @@ class GameOfMindi:
 		self.team1 = team1
 		self.team2 = team2
 		self.trump = trump
+
+class GameOf4x32:
+
+	def __init__(self, team1=[], team2=[], trump="", hands=1, bidder="", phase=1):
+		self.team1 = team1
+		self.team2 = team2
+		self.trump = trump
+		self.bidder = bidder
+		self.phase = phase
+		self.bid = hands
 	
 class Partner():
 	
